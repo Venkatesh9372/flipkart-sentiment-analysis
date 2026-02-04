@@ -68,15 +68,15 @@ flipkart-product-review-sentiment-analysis/
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/saurabhshirole1/flipkart-product-review-sentiment-analysis.git
+git clone https://github.com/Venkatesh9372/flipkart-sentiment-analysis.git
 cd flipkart-sentiment-analysis-ml
 ```
 
 ### 2️⃣ Create Virtual Environment
 
 ```bash
-python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
+python -m myenv myenv
+source myenv/bin/activate   # Windows: myenv\Scripts\activate
 ```
 
 ### 3️⃣ Install Dependencies
@@ -96,7 +96,7 @@ streamlit run app/app.py
 * Streamlit runs on port **8501**
 * Public access via EC2 Public IP
 ```
-http://13.235.132.119:8501/
+http://3.111.157.40:8501/
 
 ```
 
@@ -116,8 +116,8 @@ http://13.235.132.119:8501/
 This project demonstrates a complete end-to-end machine learning pipeline, from data preprocessing and model training to cloud deployment. It provides valuable insights into customer sentiment and showcases practical ML deployment skills.
 
 ## 🔗 Useful Links
-* **GitHub Repository:** https://github.com/saurabhshirole1/flipkart-product-review-sentiment-analysis
-* **AWS Deployment Link:** http://13.235.132.119:8501/
+* **GitHub Repository:** https://github.com/Venkatesh9372/flipkart-sentiment-analysis
+* **AWS Deployment Link:** http://3.111.157.40:8501/
 
 ## 🙌 Acknowledgement
 I would like to thank **Innomatics Research Labs** for providing the dataset and guidance throughout the internship.
