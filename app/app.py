@@ -1,91 +1,119 @@
 import streamlit as st
 import pickle
 
-# ------------------ Page Config ------------------
+# ------------------ Page Configuration ------------------
+st.set_page_config(
+    page_title="Flipkart Sentiment Analyzer",
+    page_icon="🛍️",
+    layout="centered"
+)
+
+# ------------------ Custom CSS ------------------
 st.markdown("""
 <style>
-.single-line-title {
+.main-title {
     text-align: center;
-    font-size: 40px;
-    font-weight: 700;
-    white-space: nowrap;
+    font-size: 42px;
+    font-weight: 800;
+    color: #2874F0;
+}
+
+.subtitle {
+    text-align: center;
+    color: #555;
+    font-size: 16px;
+}
+
+.card {
+    background-color: #f9f9f9;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+}
+
+.result-positive {
+    background-color: #e8f7ee;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.result-negative {
+    background-color: #fde8e8;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
 }
 </style>
-
-<h1 class="single-line-title">🛒 Flipkart Review Sentiment Analysis</h1>
 """, unsafe_allow_html=True)
+
+# ------------------ Title ------------------
+st.markdown("<div class='main-title'>🛍️ Flipkart Sentiment Analyzer</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Analyze customer emotions from product reviews using Machine Learning</div>", unsafe_allow_html=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+# ------------------ Sidebar ------------------
+st.sidebar.title("ℹ️ About Project")
+st.sidebar.info(
+    """
+    **Flipkart Review Sentiment Analysis**
+
+    - Algorithm: Logistic Regression  
+    - Vectorizer: TF-IDF  
+    - Task: Binary Sentiment Classification  
+    - Output: Positive / Negative
+    """
+)
 
 # ------------------ Load Model ------------------
 model = pickle.load(open("model/sentiment_model.pkl", "rb"))
 vectorizer = pickle.load(open("model/vectorizer.pkl", "rb"))
 
-st.markdown(
-    "<p style='text-align: center; color: gray;'>"
-    "Enter a product review and predict whether the sentiment is positive or negative."
-    "</p>",
-    unsafe_allow_html=True
+# ------------------ Input Card ------------------
+st.markdown("<div class='card'>", unsafe_allow_html=True)
+
+review_text = st.text_area(
+    "✍️ Paste a customer review below",
+    placeholder="Example: The product quality exceeded my expectations and delivery was quick.",
+    height=160
 )
 
-st.markdown("---")
+predict_btn = st.button("🚀 Analyze Sentiment", use_container_width=True)
 
-# ------------------ Input ------------------
-user_review = st.text_area(
-    "Customer Review",
-    placeholder="Example: The product quality is excellent and delivery was fast...",
-    height=150
-)
-
-st.markdown("""
-<style>
-div.stButton > button {
-    background-color: #2874F0;  /* Blue */
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 10px 16px;
-    border: none;
-}
-
-div.stButton > button:hover {
-    background-color: #1f5ed9; /* Darker blue on hover */
-}
-</style>
-""", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
 
 # ------------------ Prediction ------------------
-if st.button("🔍 Predict Sentiment", use_container_width=True):
-    if user_review.strip() == "":
-        st.warning("⚠️ Please enter a review before predicting.")
+if predict_btn:
+    if review_text.strip() == "":
+        st.warning("⚠️ Please enter a review to analyze.")
     else:
-        with st.spinner("Analyzing sentiment..."):
-            review_vector = vectorizer.transform([user_review])
-            prediction = model.predict(review_vector)
+        with st.spinner("Processing review..."):
+            transformed_text = vectorizer.transform([review_text])
+            result = model.predict(transformed_text)
 
-        st.markdown("---")
+        st.markdown("<br>", unsafe_allow_html=True)
 
-        if prediction[0] == 1:
-            st.success("✅ **Positive Review** 😊")
+        if result[0] == 1:
             st.markdown(
-                "<div style='background-color:#e6f4ea; padding:15px; border-radius:8px;'>"
-                "This review expresses a positive sentiment toward the product."
-                "</div>",
+                "<div class='result-positive'>✅ Positive Sentiment Detected 😄</div>",
                 unsafe_allow_html=True
             )
+            st.caption("Customers are likely satisfied with this product.")
         else:
-            st.error("❌ **Negative Review** 😞")
             st.markdown(
-                "<div style='background-color:#fdecea; padding:15px; border-radius:8px;'>"
-                "This review expresses a negative sentiment toward the product."
-                "</div>",
+                "<div class='result-negative'>❌ Negative Sentiment Detected 😟</div>",
                 unsafe_allow_html=True
             )
+            st.caption("This review indicates dissatisfaction or issues.")
 
 # ------------------ Footer ------------------
-st.markdown("---")
+st.markdown("<hr>", unsafe_allow_html=True)
 st.markdown(
     "<p style='text-align:center; color:gray; font-size:13px;'>"
-    "Built using TF-IDF and Logistic Regression"
+    "End-to-End ML Project • Built with Streamlit"
     "</p>",
     unsafe_allow_html=True
 )
